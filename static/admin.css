@@ -1,0 +1,268 @@
+*{
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+section{
+    background-color: #ffffff;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    
+}
+nav{
+    width: 20vw;
+    background-color: #8648778d;
+    height: 100vh;
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    z-index: 5;
+}
+.circle{
+    position: absolute;
+    height: 200px;
+    width: 200px;
+    border-radius: 50%;
+    background-color: rgba(100, 93, 181, 0.25);
+    box-shadow: 0 0 80px rgba(101, 93, 181, 0.2S);
+    backdrop-filter: blur(5px);
+    z-index: 0;
+}
+.circle1{
+    left: -50px;
+    top: -50px;
+}
+.circle2{
+    bottom: -90px;
+    margin-left: 75px;
+}
+.avatar{
+    height: 150px;
+    width: 150px;
+    border: 1px solid rgba(100, 93, 181, 0.25);
+    border-radius: 50%;
+}
+.avatarWrap{
+
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 230px;
+    flex-direction: column;
+    margin-top: 30px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+.avatarWrap>h2{
+    color: #130303;
+    font-weight: 400;
+    font-size: 22px;
+}
+.avatarWrap>h3{
+    color: #3d1717;
+    font-weight: 100;
+    font-size: 16px;
+}
+.navigation{
+    padding-top: 80px;
+    width: 100%;
+    height: 100%;
+    list-style: none;
+}
+.navigation>li{
+    /* background-color: yellow; */
+    padding-left: 15px;
+    height: 50px;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    
+    color: rgb(13, 16, 41);
+    cursor: pointer;
+}
+.navigation>li:hover{
+    background-color: rgba(0, 255, 255, 0.243);
+}
+.active{
+    background-color: rgba(0, 255, 255, 0.325);
+}
+#manageStudents{
+    width: 85vw;
+}
+.infoPannel{
+    width: 80%;
+    /* height: 80px; */
+    margin-left: 10%;
+    margin-top: 30px;
+    background-color: rgba(255, 255, 255, 0.596);
+    box-shadow: 0 0 10px rgba(184, 184, 154, 0.596);
+    border-radius: 10px;
+    padding: 5px 0 15px 10px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+.infoPannel>h3{
+    color: rgb(20, 1, 1);
+    font-weight: 500;
+    font-size: 18px;
+}
+.stats{
+    width: 98%;
+    height: 130px;
+    /* background-color: blue; */
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+
+}
+.statsCard{
+    width: 150px;
+    height: 100px;
+    background-color: #F8F8FF;
+    border-radius: 20px;
+    /* box-shadow: 0 0 20px rgba(172, 109, 224, 0.877); */
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 5px;
+    box-sizing: border-box;
+}
+.statsCard>p:nth-child(1){
+    margin-top: 10px;
+    font-size: 15px;
+}
+.statsCard>p:nth-child(2){
+    margin-top: 16px;
+    font-size: 19px;
+    font-weight: 600;
+    color: rgb(55, 0, 0);
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    padding-bottom: 5px;
+}
+.enrollNewStudents{
+    width: 200px;
+    height: 50px;
+    margin-left: 5%;
+    margin-top: 50px;
+    background-color: #ECC5FB;
+    border: 1px solid #FAF4B7;
+    border-radius: 5px;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+}
+.modal{
+    height: 100vh;
+    position: absolute;
+    width: 85vw;
+    background-color: rgba(19, 22, 52, 0.932);
+    left: 15vw;
+    top: 0;
+    padding-left: 100px;
+}
+
+.enrollment{
+    display: none;
+    place-items: center;
+}
+.close{
+    position: absolute;
+    content: "\2573";
+    top: 70px;
+    right: 200px;
+    background-color: orange;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+}
+
+.detailContainer{
+display: flex;
+flex-direction: column;
+/* align-items: center; */
+color: #F9F9F9
+}
+
+.detailContainer>p{
+    margin-top: 50px;
+}
+.detailContainer>input{
+    margin-top: 10px;
+    color: yellow;
+}
+.detailContainer>div>input{
+    width: 90px;
+    margin-left: 10px;
+    padding-left: 5px;
+}
+
+.detailContainer>div>button{
+    width: 90px;
+    margin-top: 30px;
+}
+.detailContainer>div:last-child{
+    display: grid;
+    place-items: center;
+}
+
+#searchStudent{
+    width: 500px;
+    margin-left: 300px;
+    margin-top: 60px;
+    box-sizing: border-box;
+    padding-left: 30px;
+    height: 40px;
+    border-radius: 20px;
+    border: none;
+    padding-right: 10px;
+}
+
+.basicDetails{
+    margin-top: 50px;
+    width: 60vw;
+    display: flex;
+    justify-content: space-between;
+}
+.photo{
+    height: 160px;
+    width: 120px;
+    border: 1px solid beige;
+    margin-top: 20px;
+}
+
+.basicDetails input,select{
+    width: 180px;
+    height: 30px;
+    padding-left: 10px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    border:none;
+    margin-left: 5px;
+}
+.textwrap{
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+}
+.textwrap p{
+    width: 180px;
+    color: white;
+    margin-left: 5px;
+}
+
+.updateButton{
+    width: 100px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: chartreuse;
+    font-weight: 600;
+    margin: 40px 0 0 180px;
+}
+
+.studentDetails{
+    display: none;
+}
+.editStudent{
+    display: none;
+}

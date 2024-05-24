@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Teacher | Manage Courses</title>
+    <link rel="stylesheet" href="/static/admin.css" />
+    <!-- <script src="/static/manageInstructor.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+
+    <style>
+      ul {
+        padding-left: 0px;
+      }
+
+      form {
+        width: 60%;
+        padding-top: 50px;
+      }
+
+      #manageCourses {
+        width: 80vw;
+        overflow-y: scroll;
+      }
+    </style>
+  </head>
+  <body>
+    <section>
+      <!-- Left nevigatoin section to jump onto different sections -->
+      <nav>
+        <div class="avatarWrap">
+          <div class="avatar" style="display: grid; place-items: center">
+            <img
+              src="/media/profilePhoto/{{data.photo}}"
+              alt="Profile Photo"
+              height="100%"
+            />
+          </div>
+          <h2>{{data.firstName}} {{data.lastName}}</h2>
+          <h3>(Teacher)</h3>
+        </div>
+        <ul class="navigation">
+          <li onclick="window.location.href='/'">Edit Profile</li>
+          <li onclick="window.location.href='/manageCourses'" class="active">
+            Manage Courses
+          </li>
+          <li onclick="window.location.href='/showFeedback'">Show Feedback</li>
+          <li onclick="window.location.href='/grading'">Grading</li>
+          <li onclick="window.location.href='/signout'">Logout</li>
+        </ul>
+      </nav>
+
+      <div id="manageCourses">
+        {%csrf_token%}
+        <div style="display: flex; flex-direction: column">
+          <nav class="navbar bg-light" style="height: 60px; width: 100%">
+            <div class="container-fluid">
+              <span class="navbar-brand mb-0 h1">Your Courses</span>
+            </div>
+          </nav>
+          <div class="row" style="padding: 10px; width: 60%">
+            {%for course in courses%}
+            <div class="col-sm-4">
+              <div class="card" style="height: 200px; text-align: center">
+                <div class="card-body">
+                  <h5 class="card-title">{{course.subject.subjectId}}</h5>
+                  <p class="card-text">{{course.subject.subjectName}}</p>
+                  <button
+                    class="btn btn-primary"
+                    type="button"
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasBottom{{course.subject.subjectId}}"
+                    aria-controls="offcanvasBottom"
+                  >
+                    Edit Evaluation Scheme
+                  </button>
+
+                  <div
+                    class="offcanvas offcanvas-bottom"
+                    tabindex="-1"
+                    id="offcanvasBottom{{course.subject.subjectId}}"
+                    aria-labelledby="offcanvasBottomLabel"
+                    style="height: 70vh"
+                  >
+                    <div class="offcanvas-header">
+                      <h5 class="offcanvas-title" id="offcanvasBottomLabel">
+                        Evaluation Scheme
+                      </h5>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="offcanvas"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="offcanvas-body small">
+                      <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Topic</th>
+                            <th scope="col">Weightage</th>
+                            <th scope="col">Maximum Score</th>
+                            <th scope="col"></th>
+                          </tr>
+                        </thead>
+                        <tbody
+                          id="evaluationModule{{course.subject.subjectId}}"
+                        >
+                          <tr>
+                            <th
+                              scope="row"
+                              id="rid{{course.subject.subjectId}}1"
+                            >
+                              1
+                            </th>
+                            <td>
+                              <div class="col-auto">
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  id="topic{{course.subject.subjectId}}1"
+                                />
+                              </div>
+                            </td>
+                            <td>
+                              <div class="col-auto">
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  id="weightage{{course.subject.subjectId}}1"
+                                />
+                              </div>
+                            </td>
+                            <td>
+                              <div class="col-auto">
+                                <input
+                                  type="number"
+                                  class="form-control"
+                                  id="score{{course.subject.subjectId}}1"
+                                />
+                              </div>
+                            </td>
+                            <!-- <td>
+                              <button
+                                type="button"
+                                class="btn btn-outline-warning"
+                                onclick="totalValue('{{course.subject.subjectId}}')"
+                              >
+                                Save
+                              </button>
+                              <button
+                                type="button"
+                                class="btn btn-outline-danger"
+                              >
+                                Delete
+                              </button>
+                            </td> -->
+                          </tr>
+                        </tbody>
+                      </table>
+                      <button
+                        type="button"
+                        class="btn btn-outline-primary"
+                        onclick="addField('{{course.subject.subjectId}}')"
+                      >
+                        + Add More
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-outline-success"
+                        data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasBottom{{course.subject.subjectId}}"
+                        aria-controls="offcanvasBottom"
+                        onclick="submitCourse('{{course.subject.subjectId}}')"
+                      >
+                        Submit
+                      </button>
+                      <!-- <table
+                        class="table table-bordered border-success"
+                        style="margin-top: 16px"
+                      >
+                        <thead>
+                          <th>Total Weightage</th>
+                          <th>Total Score</th>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td id="showWeightage{{course.subject.subjectId}}">
+                              0
+                            </td>
+                            <td id="showScore{{course.subject.subjectId}}">
+                              0
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {%endfor%}
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- glass morphology elements -->
+
+    <div class="circle1 circle"></div>
+    <div class="circle2 circle"></div>
+    <script>
+      let count = {};
+      const addField = (sid) => {
+        if (!count[sid]) {
+          count[sid] = 1;
+          console.log("===");
+        }
+        let rowWrap = document.createElement("tr");
+        let firstElement = document.createElement("th");
+        firstElement.setAttribute("scope", "row");
+        firstElement.innerHTML = ++count[sid];
+        firstElement.setAttribute("id", `rid${sid}${count[sid]}`);
+        rowWrap.appendChild(firstElement);
+        let ids = ["topic", "weightage", "score"];
+        for (let i = 0; i < 3; i++) {
+          let secondWrap = document.createElement("td");
+          let innerDiv = document.createElement("div");
+          innerDiv.setAttribute("class", "col-auto");
+          let innerDivInput = document.createElement("input");
+          innerDivInput.setAttribute("id", `${ids[i]}${sid}${count[sid]}`);
+          innerDivInput.setAttribute("type", "text");
+          innerDivInput.setAttribute("class", "form-control");
+          //innerDivInput.setAttribute();
+          innerDiv.appendChild(innerDivInput);
+          secondWrap.appendChild(innerDiv);
+          rowWrap.appendChild(secondWrap);
+        }
+        let delButtonWrap = document.createElement("td");
+        let button = document.createElement("button");
+        button.setAttribute("type", "button");
+        button.setAttribute("class", "btn btn-outline-danger");
+        button.innerHTML = "Delete";
+
+        let button2 = document.createElement("button");
+        button2.setAttribute("type", "button");
+        button2.setAttribute("class", "btn btn-outline-warning");
+        button2.innerHTML = "Save";
+        button2.setAttribute("onclick", `totalValue('${sid}')`);
+
+        delButtonWrap.appendChild(button2);
+        delButtonWrap.appendChild(button);
+        rowWrap.appendChild(delButtonWrap);
+        document.getElementById(`evaluationModule${sid}`).appendChild(rowWrap);
+      };
+
+      /*const totalValue = (cid) => {
+        if (!count[cid]) {
+          count[cid] = 1;
+        }
+        let val = document.getElementById(`score${cid}${count[cid]}`).value;
+        let totalScore = document.getElementById(`showScore${cid}`);
+        let score = parseInt(totalScore.innerHTML) + parseInt(val);
+        totalScore.innerHTML = score;
+
+        let weightage = document.getElementById(
+          `weightage${cid}${count[cid]}`
+        ).value;
+
+        let totalWeightage = document.getElementById(`showWeightage${cid}`);
+        let wei = parseInt(totalWeightage.innerHTML) + parseInt(weightage);
+        totalWeightage.innerHTML = wei;
+      };*/
+
+      const serverCall = (data) => {
+        let xhr = new XMLHttpRequest();
+        xhr.open("POST", "/submitEvalModules");
+        xhr.setRequestHeader(
+          "X-CSRFToken",
+          document.getElementsByName("csrfmiddlewaretoken")[0].value
+        );
+        xhr.send(JSON.stringify(data));
+        xhr.onreadystatechange = function () {
+          var data = JSON.parse(this.responseText);
+          if (data["type"] == "success") {
+            alert("Evaluation Scheme has been set");
+          } else {
+            alert("Evaluation Scheme already Exists");
+          }
+        };
+      };
+
+      const submitCourse = (cid) => {
+        if (!count[cid]) {
+          alert("Add evaluation First");
+        }
+
+        let rows = count[cid];
+        let data = {};
+        data["courseId"] = cid;
+        data["session"] = String(window.location).split("/")[4];
+        for (let i = 1; i <= rows; i++) {
+          let evname = document.getElementById(`topic${cid}${i}`).value;
+          let weightage = document.getElementById(`weightage${cid}${i}`).value;
+          let score = document.getElementById(`score${cid}${i}`).value;
+          let temp = {
+            evname: evname,
+            score: score,
+            weightage: weightage,
+          };
+          data[i] = temp;
+        }
+        console.log(data);
+        serverCall(data);
+      };
+    </script>
+  </body>
+</html>

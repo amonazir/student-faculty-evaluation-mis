@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Teacher | Manage Courses</title>
+    <link rel="stylesheet" href="/static/admin.css" />
+    <!-- <script src="/static/manageInstructor.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+
+    <style>
+      ul {
+        padding-left: 0px;
+      }
+
+      form {
+        width: 60%;
+        padding-top: 50px;
+      }
+
+      #manageCourses {
+        width: 80vw;
+        display: grid;
+        place-items: Center;
+      }
+    </style>
+  </head>
+  <body>
+    <section>
+      <!-- Left nevigatoin section to jump onto different sections -->
+      <nav>
+        <div class="avatarWrap">
+          <div class="avatar" style="display: grid; place-items: center">
+            <img
+              src="/media/profilePhoto/{{data.photo}}"
+              alt="Profile Photo"
+              height="100%"
+            />
+          </div>
+          <h2>{{data.firstName}} {{data.lastName}}</h2>
+          <h3>(Teacher)</h3>
+        </div>
+        <ul class="navigation">
+          <li onclick="window.location.href='/'">Edit Profile</li>
+          {%if m %}
+          <li onclick="window.location.href='/manageCourses'" class="active">
+            Manage Courses
+          </li>
+          {%else%}
+          <li onclick="window.location.href='/manageCourses'">
+            Manage Courses
+          </li>
+          {%endif%}
+
+          <li onclick="window.location.href='/showFeedback'">Show Feedback</li>
+          {%if g %}
+          <li onclick="window.location.href='/grading'" class="active">
+            Grading
+          </li>
+          {%else%}
+          <li onclick="window.location.href='/grading'">Grading</li>
+          {%endif%}
+          <li onclick="window.location.href='/signout'">Logout</li>
+        </ul>
+      </nav>
+
+      <div id="manageCourses">
+        <form action="" method="post" style="width: 50vw">
+          {%csrf_token%}
+          <h3 style="width: 50vw; text-align: center; margin-bottom: 20px">
+            Select Session
+          </h3>
+          <select
+            class="form-select form-select-sm"
+            aria-label=".form-select-sm example"
+            name="session"
+          >
+            <option selected>Select Session</option>
+            {%for i in session%}
+            <option value="{{i.year}}">{{i.year}}</option>
+            {%endfor%}
+          </select>
+          <button
+            type="submit"
+            class="btn btn-outline-secondary"
+            style="margin-top: 10px"
+          >
+            Submit
+          </button>
+        </form>
+      </div>
+    </section>
+    <!-- glass morphology elements -->
+
+    <div class="circle1 circle"></div>
+    <div class="circle2 circle"></div>
+  </body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin</title>
+    <link rel="stylesheet" href="/static/admin.css" />
+    <script src="/static/admin.js"></script>
+
+    <style>
+      ul {
+        padding-left: 0px;
+      }
+
+      form {
+        width: 60%;
+        padding-top: 50px;
+      }
+
+      #manageStudents {
+        place-items: center;
+        width: 80vw;
+        overflow-y: scroll;
+      }
+    </style>
+  </head>
+  <body>
+    <section>
+      <!-- Left nevigatoin section to jump onto different sections -->
+      <nav>
+        <div class="avatarWrap">
+          <div class="avatar" style="display: grid; place-items: center">
+            <img
+              src="/media/profilePhoto/{{data.photo}}"
+              alt="Profile Photo"
+              height="100%"
+            />
+          </div>
+          <h2>{{data.name}}</h2>
+          <h3>(Administrator)</h3>
+        </div>
+        <ul class="navigation">
+          <li onclick="window.location.href = '/'" class="active">
+            Manage Students
+          </li>
+          <li onclick="window.location.href = '/instructor'">
+            Manage Instructors
+          </li>
+          <li onclick="window.location.href = '/course'">Manage Courses</li>
+          <li onclick="window.location.href = '/registrationSetup'">
+            Registration Window
+          </li>
+          <li onclick="window.location.href = '/feedbacks'">Feedbacks</li>
+          <li onclick="window.location.href = '/adminSettings'">Settings</li>
+          <li onclick="window.location.href = '/signout'">Logout</li>
+        </ul>
+      </nav>
+
+      <div id="manageStudents">
+        <div class="infoPannel">
+          <div class="stats">
+            <div class="statsCard">
+              <p>Current Session</p>
+              <p>2022-23</p>
+            </div>
+            <div class="statsCard">
+              <p>#students</p>
+              <p>{{scount}}</p>
+            </div>
+            <div class="statsCard">
+              <p>#Courses</p>
+              <p>{{ccount}}</p>
+            </div>
+            <div class="statsCard">
+              <p>#Teachers</p>
+              <p>{{tcount}}</p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="enrollNewStudents"
+          onclick="document.getElementsByClassName('enrollment')[0].style.display = 'grid'"
+        >
+          Enroll New Students
+        </div>
+
+        <div
+          class="enrollNewStudents"
+          onclick="document.getElementsByClassName('editStudent')[0].style.display = 'block'"
+        >
+          Edit Student
+        </div>
+        <!-- New overlay to enroll students to the institute -->
+        <div class="enrollment modal">
+          <!-- Button to close the enrollment modal -->
+          <div class="close" onclick="closeResistration()"></div>
+
+          <form
+            class="detailContainer"
+            method="post"
+            enctype="multipart/form-data"
+            onsubmit="return confirm('Do you really want to submit the form?');"
+          >
+            {% csrf_token %}
+            <p>Upload Excel File containing deatils of new Students</p>
+            <input
+              type="file"
+              name="studentDetails"
+              id="studentDetails"
+              required
+            />
+            <div>
+              <button type="submit">Enroll</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- new overlay to fetch and update information of student -->
+        <div class="modal editStudent">
+          <div class="close" onclick="closeResistration()"></div>
+
+          <input
+            type="search"
+            name=""
+            id="searchStudent"
+            placeholder="Roll Number of student"
+          />
+
+          <div class="studentDetails">
+            <div class="basicDetails">
+              <div>
+                <div class="textwrap">
+                  <p>Roll Number</p>
+                  <input type="text" name="rollNumber" id="rollNumber" />
+                </div>
+                <div class="textwrap">
+                  <input type="text" value="" id="firstName" />
+                  <input type="text" value="" id="lastName" />
+                </div>
+                <div class="textwrap">
+                  <p>Father's name</p>
+                  <input type="text" name="fname" id="fname" />
+                </div>
+                <div class="textwrap">
+                  <p>Mother's name</p>
+                  <input type="text" name="mname" id="mname" />
+                </div>
+                <div class="textwrap">
+                  <p>Date of Birth</p>
+                  <input type="date" name="dob" id="dob" />
+                </div>
+                <div class="textwrap">
+                  <p>Contact number</p>
+                  <input type="text" id="contactNumber" />
+                </div>
+                <div class="textwrap">
+                  <p>Parent's Contact Number</p>
+                  <input type="text" id="parentContact" />
+                </div>
+              </div>
+              <div class="photo">
+                <img src="" alt="" srcset="" id="sphoto" height="100%" />
+              </div>
+            </div>
+            <div class="textwrap">
+              <p>Address</p>
+              <textarea
+                name="address"
+                id="address"
+                cols="80"
+                rows="7"
+              ></textarea>
+            </div>
+            <button class="updateButton">Update</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- glass morphology elements -->
+
+      <div class="circle1 circle"></div>
+      <div class="circle2 circle"></div>
+    </section>
+  </body>
+</html>

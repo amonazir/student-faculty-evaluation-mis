@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin</title>
+    <link rel="stylesheet" href="/static/admin.css" />
+    <script src="/static/admin.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body>
+    <section>
+      <!-- Left nevigatoin section to jump onto different sections -->
+      <nav>
+        <div class="avatarWrap">
+          <div class="avatar" style="display: grid; place-items: center">
+            <img
+              src="/media/profilePhoto/{{data.photo}}"
+              alt="Profile Photo"
+              height="100%"
+            />
+          </div>
+          <h2>{{data.name}}</h2>
+          <h3>(Administrator)</h3>
+        </div>
+        <ul class="navigation">
+          <li onclick="window.location.href = '/'">Manage Students</li>
+          <li onclick="window.location.href = '/instructor'">
+            Manage Instructors
+          </li>
+          <li onclick="window.location.href = '/course'" class="active">
+            Manage Courses
+          </li>
+          <li onclick="window.location.href = '/registrationSetup'">
+            Registration Window
+          </li>
+          <li onclick="window.location.href = '/feedbacks'">Feedbacks</li>
+          <li onclick="window.location.href = '/adminSettings'">Settings</li>
+          <li onclick="window.location.href = '/signout'">Logout</li>
+        </ul>
+      </nav>
+      <style>
+        ul {
+          padding: 0px;
+        }
+
+        .courses {
+          display: flex;
+          flex-direction: row;
+          flex-wrap: wraps;
+          width: 90%;
+          margin-left: 5%;
+          gap: 50px;
+          margin-top: 90px;
+        }
+
+        .gutter {
+          height: 150px;
+          width: 150px;
+          background-color: rgba(29, 15, 219, 0.579);
+          border-radius: 10px;
+          position: relative;
+          z-index: 0;
+        }
+
+        .addNewCourse {
+          display: none;
+          z-index: 3;
+        }
+
+        .gutter {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          box-sizing: border-box;
+          text-align: center;
+          justify-content: space-evenly;
+          color: rgb(49, 7, 33);
+          overflow: hidden;
+        }
+
+        .edit {
+          position: absolute;
+          height: 60px;
+          width: 60px;
+          background-color: yellow;
+          border-radius: 50%;
+          margin-left: -190px;
+          margin-top: -190px;
+          transition: transform 1s, margin-left 0.5s, margin-top 0.5s;
+          transform-style: preserve-3d;
+        }
+
+        .gutter:hover .edit {
+          margin-left: -140px;
+          margin-top: -140px;
+        }
+
+        .edit > svg {
+          height: 20px;
+          margin-top: 30px;
+          margin-left: 20px;
+        }
+
+        .textwrap input,
+        select {
+          width: 350px !important;
+          /* height: 40px !important; */
+          padding-left: 10px;
+          box-sizing: border-box;
+          border-radius: 5px;
+          margin-left: 5px;
+        }
+
+        .textwrap label {
+          color: black;
+        }
+
+        .detailContainer {
+          margin-top: 100px;
+        }
+
+        .detailContainer > div:last-child {
+          display: block;
+        }
+
+        .overlay {
+          height: 100vh;
+          position: absolute;
+          width: 85vw;
+          background-color: rgba(19, 22, 52, 0.932);
+          left: 15vw;
+          top: 0;
+          padding-left: 100px;
+        }
+
+        #manageStudents {
+          overflow-y: scroll;
+        }
+
+        /* width */
+        ::-webkit-scrollbar {
+          width: 10px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+          box-shadow: inset 0 0 5px rgb(94, 112, 214);
+          border-radius: 10px;
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+          background: rgb(35, 69, 155);
+          border-radius: 10px;
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+          background: #2f4fae;
+        }
+      </style>
+      <div id="manageStudents">
+        {% if messages %}
+        <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
+          <symbol id="success" fill="currentColor" viewBox="0 0 16 16">
+            <path
+              d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"
+            />
+          </symbol>
+          <symbol id="warning" fill="currentColor" viewBox="0 0 16 16">
+            <path
+              d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"
+            />
+          </symbol>
+        </svg>
+        <ul class="messages">
+          <div
+            class="alert alert-{{ messages }} alert-warning alert-dismissible fade show"
+            role="alert"
+          >
+            <svg
+              class="bi flex-shrink-0 me-2"
+              width="24"
+              height="24"
+              role="img"
+              aria-label="Success:"
+            >
+              <use xlink:href="#{{ messages }}" />
+            </svg>
+            <strong>{{ message }}</strong>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="alert"
+              aria-label="Close"
+              onclick="window.location.href = '/course'"
+            ></button>
+          </div>
+        </ul>
+        {% endif %}
+        <div
+          class="enrollNewStudents"
+          onclick="document.getElementsByClassName('addNewCourse')[0].style.display = 'block'"
+        >
+          Add New Course
+        </div>
+        <div class="addNewCourse overlay">
+          <!-- Button to close the enrollment modal -->
+          <div class="close" onclick="closeResistration()"></div>
+          <h2 style="color: white; margin-top: 60px">Introduce a new Course</h2>
+          <form
+            class="detailContainer"
+            method="post"
+            enctype="multipart/form-data"
+            onsubmit="return confirm('Do you really want to submit?');"
+          >
+            {% csrf_token %}
+            <form class="basicDetails" method="post">
+              <div>
+                <div class="textwrap">
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      class="form-control text-uppercase"
+                      id="sid"
+                      name="sid"
+                      placeholder="Course ID"
+                    />
+                    <label for="sid">Course ID</label>
+                  </div>
+                </div>
+                <div class="textwrap">
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="sname"
+                      name="sname"
+                      placeholder="Course Name"
+                    />
+                    <label for="sname">Course Name</label>
+                  </div>
+                </div>
+                <div class="textwrap">
+                  <select
+                    class="form-select"
+                    aria-label="Default select example"
+                    name="ctype"
+                    id="ctype"
+                    style="height: 50px"
+                  >
+                    <option value="None">Select Course Type</option>
+                    <option value="Core">Core</option>
+                    <option value="OE">Other Elective</option>
+                    <option value="PE">Program Elective</option>
+                  </select>
+                </div>
+                <div class="textwrap">
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="credits"
+                      name="credits"
+                      placeholder="Credits"
+                    />
+                    <label for="credits">Credits</label>
+                  </div>
+                </div>
+                <div class="textwrap">
+                  <div class="form-floating">
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="offeredSem"
+                      name="offeredSem"
+                      placeholder="Offered Sem"
+                    />
+                    <label for="offeredSem">Offered Sem</label>
+                  </div>
+                </div>
+                <div class="textwrap">
+                  <div class="form-floating">
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="noseats"
+                      name="noseats"
+                      placeholder="Number of Seats"
+                    />
+                    <label for="noseats">Number of Seats</label>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <button type="submit" class="btn btn-secondary">Enroll</button>
+              </div>
+            </form>
+          </form>
+        </div>
+        <div class="courses">
+          {% for course in subjects %}
+          <div class="gutter" style="color: white">
+            <h3>{{course.subjectId}}</h3>
+            <p>{{course.subjectName}}</p>
+            <a href="/course/edit/{{course.subjectId}}" class="edit"
+              ><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+                <path
+                  d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"
+                /></svg
+            ></a>
+            <h7 style="font-size: 12px">(Sem {{course.offeredSem}})</h7>
+          </div>
+          {%endfor%}
+        </div>
+      </div>
+
+      <!-- glass morphology elements -->
+
+      <div class="circle1 circle"></div>
+      <div class="circle2 circle"></div>
+    </section>
+
+    <script>
+      function closeResistration() {
+        document.getElementsByClassName("overlay")[0].style.display = "none";
+      }
+    </script>
+  </body>
+</html>

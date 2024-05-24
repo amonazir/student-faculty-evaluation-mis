@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{user.first_name}} Home</title>
+    <link rel="stylesheet" href="/static/admin.css" />
+    <script src="/static/admin.js"></script>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+
+    <style>
+      ul {
+        padding-left: 0;
+      }
+
+      .registrationForm {
+        width: 50%;
+      }
+
+      #manageStudents {
+        display: grid;
+        place-items: center;
+      }
+    </style>
+  </head>
+
+  <body>
+    <section>
+      <!-- Left nevigatoin section to jump onto different sections -->
+      <nav>
+        <div class="avatarWrap">
+          <div class="avatar" style="display: grid; place-items: center">
+            <img
+              src="/media/profilePhoto/{{data.photo}}"
+              alt="Profile Photo"
+              height="100%"
+            />
+          </div>
+          <h2>{{data.firstName}} {{data.lastName}}</h2>
+          <h3>(Student)</h3>
+        </div>
+        <ul class="navigation">
+          <li onclick="window.location.href = '/'">Profile</li>
+          <li onclick="window.location.href = '/courseregistration'">
+            Course Registration
+          </li>
+          <li onclick="window.location.href = '/currentScore'">
+            Current Sem Score
+          </li>
+          <li onclick="window.location.href = '/feedback'">Feedback</li>
+          <li class="active" onclick="window.location.href = '/data'">
+            Cumulative Past Data
+          </li>
+          <li onclick="window.location.href = '/signout'">Logout</li>
+        </ul>
+      </nav>
+
+      <div id="manageStudents">
+        <div style="display: flex; flex-direction: column; align-items: center">
+          <table
+            style="width: 35vw; text-align: center"
+            class="table table-hover table-bordered"
+          >
+            <thead style="border-bottom: 2px solid black">
+              <tr>
+                <th scope="col">Total Credits</th>
+                <th scope="col">CGPA</th>
+                <th scope="col">Current Credits</th>
+                <th scope="col">SGPA</th>
+              </tr>
+            </thead>
+            <tbody class="table-group-divider">
+              <tr>
+                <td>123</td>
+                <td>4.5</td>
+                <td>21</td>
+                <td>6.7</td>
+              </tr>
+            </tbody>
+          </table>
+          <table
+            style="width: 60vw; margin-top: 100px"
+            class="table table-hover table-bordered"
+          >
+            <thead style="border-bottom: 2px solid black">
+              <tr>
+                <th scope="col">S.No.</th>
+                <th scope="col">Subject Code</th>
+                <th scope="col">Subject Name</th>
+                <th scope="col">Credits</th>
+                <th scope="col">Grade</th>
+              </tr>
+            </thead>
+            <tbody class="table-group-divider">
+              <tr>
+                <th scope="row">1</th>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>4</td>
+                <td>A</td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>4</td>
+                <td>A</td>
+              </tr>
+              <tr>
+                <th scope="row">3</th>
+                <td>Larry</td>
+                <td>Doe</td>
+                <td>4</td>
+                <td>A</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- glass morphology elements -->
+
+      <div class="circle1 circle"></div>
+      <div class="circle2 circle"></div>
+    </section>
+  </body>
+</html>

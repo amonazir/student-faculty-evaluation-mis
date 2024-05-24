@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{user.first_name}} Home</title>
+    <link rel="stylesheet" href="/static/admin.css" />
+    <script src="/static/admin.js"></script>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+
+    <style>
+      ul {
+        padding-left: 0px;
+      }
+
+      #manageStudents {
+        display: grid;
+        place-items: center;
+        overflow-y: scroll;
+      }
+
+      form {
+        width: 60%;
+        padding-top: 50px;
+      }
+    </style>
+    <style>
+      .accordion {
+        background-color: #eee;
+        color: #444;
+        cursor: pointer;
+        padding: 18px;
+        width: 100%;
+        border: none;
+        text-align: left;
+        outline: none;
+        font-size: 15px;
+        transition: 0.4s;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.158);
+      }
+
+      .active2,
+      .accordion:hover {
+        background-color: #ccc;
+      }
+
+      .panel {
+        padding: 0 18px;
+        display: none;
+        background-color: white;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+
+  <body>
+    <section>
+      <!-- Left nevigatoin section to jump onto different sections -->
+      <nav>
+        <div class="avatarWrap">
+          <div class="avatar" style="display: grid; place-items: center">
+            <img
+              src="/media/profilePhoto/{{prof.photo}}"
+              alt="Profile Photo"
+              height="100%"
+            />
+          </div>
+          <h2>{{prof.firstName}} {{prof.lastName}}</h2>
+          <h3>(Student)</h3>
+        </div>
+        <ul class="navigation">
+          <li onclick="window.location.href = '/'">Profile</li>
+          <li onclick="window.location.href = '/courseregistration'">
+            Course Registration
+          </li>
+          <li class="active" onclick="window.location.href = '/currentScore'">
+            Current Sem Score
+          </li>
+          <li onclick="window.location.href = '/feedback'">Feedback</li>
+          <li onclick="window.location.href = '/data'">Cumulative Past Data</li>
+          <li onclick="window.location.href = '/signout'">Logout</li>
+        </ul>
+      </nav>
+
+      <div id="manageStudents">
+        <div style="width: 60vw">
+          {%for sub in subs%}
+          <button class="accordion">
+            {{sub.subject.subject.subjectId}} -
+            {{sub.subject.subject.subjectName}} -
+            {{sub.subject.subject.credits}}
+          </button>
+          <div class="panel">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Evaluation Name</th>
+                  <th scope="col">Weightage</th>
+                  <th scope="col">Max Score</th>
+                  <th scope="col">Score</th>
+                </tr>
+              </thead>
+              <tbody>
+                {%for detail in sub.scoreSheet.all%}
+                <tr>
+                  <th scope="row">{{detail.evaluationMethod.name}}</th>
+                  <td>{{detail.evaluationMethod.weightage}}</td>
+                  <td>{{detail.evaluationMethod.max_score}}</td>
+                  <td>{{detail.Score}}</td>
+                </tr>
+                {%endfor%}
+              </tbody>
+            </table>
+          </div>
+          {%endfor%}
+        </div>
+      </div>
+
+      <!-- glass morphology elements -->
+
+      <div class="circle1 circle"></div>
+      <div class="circle2 circle"></div>
+    </section>
+
+    <script>
+      var acc = document.getElementsByClassName("accordion");
+      var i;
+
+      for (i = 0; i < acc.length; i++) {
+        acc[i].addEventListener("click", function () {
+          this.classList.toggle("active2");
+          var panel = this.nextElementSibling;
+          if (panel.style.display === "block") {
+            panel.style.display = "none";
+          } else {
+            panel.style.display = "block";
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

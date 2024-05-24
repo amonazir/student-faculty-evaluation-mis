@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Teacher | Grading Scheme</title>
+  <link rel="stylesheet" href="/static/admin.css" />
+  <!-- <script src="/static/manageInstructor.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+
+  <style>
+    ul {
+      padding-left: 0px;
+    }
+
+    form {
+      width: 60%;
+      padding-top: 50px;
+    }
+
+    #setGrading {
+      place-items: center;
+      width: 80vw;
+      overflow-y: scroll;
+    }
+  </style>
+</head>
+
+<body>
+  <section>
+    <!-- Left nevigatoin section to jump onto different sections -->
+    {%csrf_token%}
+    <nav>
+      <div class="avatarWrap">
+        <div class="avatar" style="display: grid; place-items: center">
+          <img src="/media/profilePhoto/{{data.photo}}" alt="Profile Photo" height="100%" />
+        </div>
+        <h2>{{data.firstName}} {{data.lastName}}</h2>
+        <h3>(Teacher)</h3>
+      </div>
+      <ul class="navigation">
+        <li onclick="window.location.href='/'">Edit Profile</li>
+        <li onclick="window.location.href='/manageCourses'">
+          Manage Courses
+        </li>
+        <li onclick="window.location.href='/showFeedback'">Show Feedback</li>
+        <li onclick="window.location.href='/grading'" class="active">
+          Grading
+        </li>
+        <li onclick="window.location.href='/signout'">Logout</li>
+      </ul>
+    </nav>
+
+    <div id="setGrading">
+      <div style="display: flex; flex-direction: column; align-items: center">
+        <nav class="navbar bg-light" style="height: 60px; width: 100%">
+          <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">Grading</span>
+          </div>
+        </nav>
+        <div class="row" style="padding: 12px; width: 60%">
+          {%for course in courses%}
+          <div class="col-sm-4" style="padding: 12px">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">{{course.subject.subjectId}}</h5>
+                <p class="card-text">{{course.subject.subjectName}}</p>
+                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
+                  data-bs-target="#offcanvasBottom{{course.subject.subjectId}}" aria-controls="offcanvasBottom"
+                  onclick="fetchStudent('{{course.subject.subjectId}}')">
+                  Grade Students
+                </button>
+
+                <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom{{course.subject.subjectId}}"
+                  aria-labelledby="offcanvasBottomLabel" style="height: 70vh">
+                  <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasBottomLabel">
+                      Evaluation Scheme
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                  </div>
+                  <div class="offcanvas-body small" id="{{course.subject.subjectId}}">
+                    <table class="table table-hover">
+                      <thead>
+                        <tr>
+                          <input type="text" value="{{course.evaluation.all|length}}"
+                            id="count{{course.subject.subjectId}}" style="display: none" />
+                          <th scope="col">Roll No.</th>
+                          <th scope="col">Student Name</th>
+                          {%for i in course.evaluation.all%}
+                          <th scope="col" id="{{i.id}}" name="eval{{course.subject.subjectId}}">
+                            {{i.name}}
+                          </th>
+                          {%endfor%}
+                        </tr>
+                        <tr>
+                          <th scope="col"></th>
+                          <th scope="col"></th>
+                          {%for i in course.evaluation.all%}
+                          <th scope="col">
+                            Max: {{i.max_score}}, WT: {{i.weightage}}%
+                          </th>
+                          {%endfor%}
+                        </tr>
+                      </thead>
+                      <tbody id="students{{course.subject.subjectId}}"></tbody>
+                    </table>
+                    <button type="button" class="btn btn-outline-primary">
+                      Save
+                    </button>
+                    <button type="button" class="btn btn-outline-success" data-bs-toggle="offcanvas"
+                      data-bs-target="#offcanvasBottom{{course.subject.subjectId}}" aria-controls="offcanvasBottom"
+                      onclick="submitGrade('{{course.subject.subjectId}}')">
+                      Finalise Grade
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {%endfor%}
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let called = {};
+      const populate = (cid, data) => {
+        let fields = ["name", "roll"];
+        for (let p = 0; p < data.length; p++) {
+          let val = data[p];
+          let t = document.getElementById(`students${cid}`);
+          let trWrap = document.createElement("tr");
+          let evlans = document.getElementById(`count${cid}`).value;
+          for (let i = 0; i < 2; i++) {
+            console.log(val);
+            let x = document.createElement("th");
+            x.setAttribute("scope", "row");
+            x.innerHTML = val[fields[i]];
+            trWrap.appendChild(x);
+          }
+
+          for (let i = 0; i < evlans; i++) {
+            let td = document.createElement("td");
+            let dv = document.createElement("div");
+            dv.setAttribute("class", "col-auto");
+            let ipt = document.createElement("input");
+            ipt.setAttribute("type", "text");
+            ipt.setAttribute("class", "form-control");
+
+            dv.appendChild(ipt);
+            td.appendChild(dv);
+            trWrap.append(td);
+          }
+          trWrap.setAttribute("id", "sheetid_" + val["id"]);
+          t.appendChild(trWrap);
+        }
+
+        called[cid] = true;
+      };
+
+      let session = String(window.location).split("/")[4];
+      const fetchStudent = (cid) => {
+        if (called[cid]) return;
+        let xhr = new XMLHttpRequest();
+        xhr.open("POST", "/fetchStudents");
+        xhr.setRequestHeader(
+          "X-CSRFToken",
+          document.getElementsByName("csrfmiddlewaretoken")[0].value
+        );
+        xhr.send(JSON.stringify({ cid: cid, session: session }));
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState == 4) {
+            var data = JSON.parse(this.responseText)["data"];
+            populate(cid, data);
+            console.log(data);
+          }
+        };
+      };
+
+      const serverCall = (data) => {
+        let xhr = new XMLHttpRequest();
+        xhr.open("POST", "/submitstudentMark");
+        xhr.setRequestHeader(
+          "X-CSRFToken",
+          document.getElementsByName("csrfmiddlewaretoken")[0].value
+        );
+        xhr.send(JSON.stringify(data));
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState == 4) {
+            var data = JSON.parse(this.responseText);
+            if (data["type"] == "success") {
+              alert("Students marks has been updated");
+            } else {
+              alert("Error occured");
+            }
+          }
+        };
+      };
+
+      const getStudentData = (data, cid) => {
+        studentWrap = document.getElementById(`students${cid}`);
+        let student = studentWrap.childNodes;
+        result = {};
+        let evalCount = document.getElementById("count" + cid).value;
+        for (let i = 0; i < student.length; i++) {
+          let sid = student[i].id.split("_")[1];
+          let temp = {};
+          for (let j = 0; j < evalCount; j++) {
+            let mark =
+              student[i].childNodes[j + 2].childNodes[0].childNodes[0].value;
+            temp[data[j]] = mark;
+          }
+          result[sid] = temp;
+        }
+
+        console.log(result);
+        serverCall(result);
+      };
+
+      const submitGrade = (cid) => {
+        let y = document.getElementsByName(`eval${cid}`);
+        let evalIds = [];
+        for (let i = 0; i < y.length; i++) {
+          evalIds.push(y[i].id);
+        }
+        console.log(evalIds);
+
+        //if (confirm("Do you Really want to submit? ")) {
+        getStudentData(evalIds, cid);
+        //}
+      };
+    </script>
+    <!-- glass morphology elements -->
+
+    <div class="circle1 circle"></div>
+    <div class="circle2 circle"></div>
+  </section>
+</body>
+
+</html>

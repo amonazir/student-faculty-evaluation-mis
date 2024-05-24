@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin</title>
+    <link rel="stylesheet" href="/static/admin.css" />
+    <script src="/static/admin.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+
+    <style>
+      ul {
+        padding-left: 0px;
+      }
+
+      form {
+        width: 60%;
+        padding-top: 50px;
+      }
+
+      #showFeedback {
+        place-items: center;
+        width: 80vw;
+        overflow-y: scroll;
+      }
+    </style>
+  </head>
+  <body>
+    <section>
+      <!-- Left nevigatoin section to jump onto different sections -->
+      <nav>
+        <div class="avatarWrap">
+          <div class="avatar" style="display: grid; place-items: center">
+            <img
+              src="/media/profilePhoto/{{data.photo}}"
+              alt="Profile Photo"
+              height="100%"
+            />
+          </div>
+          <h2>{{data.name}}</h2>
+          <h3>(Administrator)</h3>
+        </div>
+        <ul class="navigation">
+          <li onclick="window.location.href = '/'">Manage Students</li>
+          <li onclick="window.location.href = '/instructor'">
+            Manage Instructors
+          </li>
+          <li onclick="window.location.href = '/course'">Manage Courses</li>
+          <li onclick="window.location.href = '/registrationSetup'">
+            Registration Window
+          </li>
+          <li onclick="window.location.href = '/feedbacks'" class="active">
+            Feedbacks
+          </li>
+          <li onclick="window.location.href = '/adminSettings'">Settings</li>
+          <li onclick="window.location.href = '/signout'">Logout</li>
+        </ul>
+      </nav>
+
+      <div id="showFeedback">
+        <div style="display: flex; flex-direction: column; align-items: center">
+          <nav class="navbar bg-light" style="height: 60px; width: 100%">
+            <div class="container-fluid">
+              <span class="navbar-brand mb-0 h1">Feedback</span>
+            </div>
+          </nav>
+          <table
+            style="width: 60vw; margin-top: 100px"
+            class="table table-hover table-bordered"
+          >
+            <thead style="border-bottom: 2px solid black">
+              <tr>
+                <th scope="col">S.No.</th>
+                <th scope="col">Subject Code</th>
+                <th scope="col">Subject Name</th>
+                <th scope="col">Average Rating</th>
+                <th scope="col">Feedback</th>
+              </tr>
+            </thead>
+            <tbody class="table-group-divider">
+              {%for feedback in feedbacks%}
+              <tr>
+                <th scope="row">{{forloop.counter}}</th>
+                <td>{{feedback.subject.subject.subjectId}}</td>
+                <td>{{feedback.subject.subject.subjectName}}</td>
+                <td>4</td>
+                <td>
+                  <div class="accordion accordion-item" id="accordionExample">
+                    <h2 class="accordion-header" id="headingOne">
+                      <button
+                        class="accordion-button btn-outline-secondary collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapse{{forloop.counter}}"
+                        aria-expanded="false"
+                        aria-controls="collapse{{forloop.counter}}"
+                      >
+                        More Info
+                      </button>
+                    </h2>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="5" style="padding: 0px">
+                  <div
+                    id="collapse{{forloop.counter}}"
+                    class="accordion accordion-item accordion-collapse collapse"
+                    aria-labelledby="heading{{forloop.counter}}"
+                    data-bs-parent="#accordionExample"
+                  >
+                    <div
+                      class="accordion-body"
+                      style="height: 50vh; overflow-y: scroll"
+                    >
+                      {{feedback.description}}
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              {%endfor%}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- glass morphology elements -->
+
+      <div class="circle1 circle"></div>
+      <div class="circle2 circle"></div>
+    </section>
+  </body>
+</html>
